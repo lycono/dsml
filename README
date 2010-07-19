@@ -1,0 +1,93 @@
+<html>
+
+<body>
+
+dsml (Doesn't Suck Markup Language, pronounced "dismal") is a terse, simple markup language for when XML is simply overkill or overhead (so pretty much all the time).
+
+<h3>What is dsml?</h3>
+
+<p>dsml (Doesn't Suck Markup Language, pronounced "dismal") is a terse, simple markup language for when XML is simply overkill or overhead (so pretty much all the time).</p>
+
+<p>dsml doesn't bother with types, schemas or other nonsense. It's simple, straightforward and most importantly, terse.</p>
+
+<h3>Writing dsml</h3>
+
+<p>dsml only has one type of element, the "node". In it's simplest form a node is simply a name. For example:</p>
+
+<p><code>(mynode)</code></p>
+
+<p>A node always has a name, may have attributes, and may have children or may have a value.</p>
+
+<p>A node with attributes:</p>
+
+<p><code>(mynode attr="value")</code></p>
+
+<p>A node with a value:<p>
+
+<p><code>(mynode "value")</code></p>
+
+<p>A node with attributes and a value:</p>
+
+<p><code>(mynode attr="value" "something")</code></p>
+
+<p>A node can contain any number of child nodes. For example:</p>
+
+<p><code>(mynode (node1) (node2) (node3))</code></p>
+
+<p>An example with child nodes and attributes:</p>
+
+<p><code>(mynode (node1 attr="value") (node2 (node3 "some value")))</code></p>
+
+<p>A full example to configure some imaginary pieve of software:</p>
+
+<p><pre>
+(myapp version="1.1"
+  (home "C:/Tools/MyApp")
+  (install-date "20100712")
+  (last-user-login "20100722")
+  (screen
+    (size "800x600")
+    (resolution "1280x1024")
+    (last-window-position x="100" y="24")
+  )
+)
+</pre></p>
+
+<h3>Parsing dsml</h3>
+
+<p>In general, dsml users will simply point the dsml parser at an input stream, allow the parser to build a dsml model and then traverse the model. There are three model classes: <code>Document</code>, <code>Attribute</code>, and <code>Node</code></p>
+
+<p><code>Attribute</code> is exactly what you think it is, a name/value pair. A <code>Document</code> represnts a dsml document, it simply wraps root nodes (note that unlike XML, a dsml document can have any number of "root" nodes, a document is therefore a forest of dsml trees). The <code>Node</code> class is the primary class for dealing with dsml documents. It provides access to a node's name, it's value (if it has a value), it's attributes (if it has attributes), or any children nodes (if it has child nodes). The <code>Node</code> instances merely represent a tree.</p>
+
+<p>Parsing Example (DOM style):</p>
+
+<pre>
+  java.io.Reader in = /* Create a reader */
+
+  ModelBuildingContext ctx = DefaultFactory.createContext();
+  Parser parser = DefaultFactory.createParser();
+
+  parser.parse(ctx, in);
+
+  Document doc = ctx.getDocument();
+
+  Writer writer = DefaultFactory.getWriter();
+
+  writer.write(doc, System.out);
+</pre>
+
+<p>If you wish to take action as the dsml document is parsed rather than traverse the Document afterwards you can simply create your own implementation of ParseContext.</p>
+
+<p>Parsing Example (SAX style):</p>
+
+<pre>
+  java.io.Reader in = /* Create a reader */
+
+  ParseContext ctx = new MyCoolParseContext();
+  Parser parser = DefaultFactory.createParser();
+
+  parser.parse(ctx, in);
+</pre>
+
+</body>
+</html>
