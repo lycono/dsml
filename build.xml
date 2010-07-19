@@ -1,0 +1,40 @@
+<project default="all">
+
+  <target name="all" depends="lib"/>
+  
+  <target name="init">
+    <mkdir dir="bin"/>
+    <mkdir dir="doc"/>
+  </target>
+
+  <target name="lib" depends="compile">
+    <jar destfile="dsml.jar" basedir="bin" includes="**/*.class"/>
+  </target>
+
+  <target name="compile" depends="init">
+    <javac srcdir="src" 
+           classpath="bin" 
+           destdir="bin" 
+           includes="**/*.java" 
+           deprecation="true" 
+           debug="true" 
+           includeantruntime="false"/>
+  </target>
+
+  <target name="doc" depends="compile">
+    <javadoc destdir="doc" 
+             sourcepath="src" 
+             classpath="bin" 
+             packagenames="org.lycono.dsml.*" 
+             excludepackagenames="org.lycono.dsml.impl.parser.state"
+             overview="src/overview.html"
+             author="yes"/>
+  </target>
+
+  <target name="clean">
+    <delete dir="bin"/>
+    <delete file="dsml.jar"/>
+    <delete dir="doc"/>
+  </target>
+
+</project>
