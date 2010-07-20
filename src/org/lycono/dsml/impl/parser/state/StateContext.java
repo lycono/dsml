@@ -27,6 +27,12 @@ public interface StateContext {
 
     public void onEvent(StateEvent e);
 
+    public void onChar(char c);
+
+    public int getLineNumber();
+
+    public int getCharNumber();
+
     public String getCurrentTagName();
 
 }

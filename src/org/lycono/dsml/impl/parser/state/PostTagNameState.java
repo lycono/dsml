@@ -29,7 +29,7 @@ public class PostTagNameState implements State {
 
     public PostTagNameState() {}
 
-    public State step(StateContext ctx, Reader in) throws IOException {
+    public State step(StateContext ctx, Reader in) throws IOException, StateException {
         char c = (char) in.read();
         StateUtil.errorIfEof(c);
         if (StateUtil.isBlankChar(c)) {
@@ -50,7 +50,7 @@ public class PostTagNameState implements State {
             return new BeginTagState();
         }
         else {
-            throw new RuntimeException("Invalid character for state PostTagNameState: " + c);
+            throw StateUtil.createCharError(ctx, c, new String[] {"blank", "letter", "\"", ")", "("});
         }
     }
 

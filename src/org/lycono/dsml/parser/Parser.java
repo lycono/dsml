@@ -27,8 +27,8 @@ import java.io.*;
  */
 public interface Parser {
 
-    public void parse(ParseContext ctx, InputStream in) throws IOException;
+    public void parse(ParseContext ctx, InputStream in) throws IOException, ParseException;
 
-    public void parse(ParseContext ctx, Reader in) throws IOException;
+    public void parse(ParseContext ctx, Reader in) throws IOException, ParseException;
 
 }

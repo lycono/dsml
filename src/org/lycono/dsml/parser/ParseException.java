@@ -16,35 +16,25 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
-package org.lycono.dsml.impl.parser.state;
-
-import java.util.Stack;
+package org.lycono.dsml.parser;
 
 /**
- * Parsing state.
+ * Exception for errors encountered during parsing.
  *
  * @author Matt Bateman
  */
-public class LoggingStateContext implements StateContext {
+public class ParseException extends Exception {
 
-    private Stack<String> mTagNames;
-
-    public LoggingStateContext() {
-        mTagNames = new Stack<String>();
+    public ParseException() {
+        super();
     }
 
-    public void onEvent(StateEvent e) {
-        if (e.getType() == StateEvent.Type.TAG_NAME) {
-            mTagNames.push(e.getValue());
-        }
-        else if (e.getType() == StateEvent.Type.END_TAG) {
-            mTagNames.pop();
-        }
-        System.out.println(e);
+    public ParseException(String mesg) {
+        super(mesg);
     }
 
-    public String getCurrentTagName() {
-        return mTagNames.peek();
+    public ParseException(String mesg, Throwable t) {
+        super(mesg, t);
     }
 
 }

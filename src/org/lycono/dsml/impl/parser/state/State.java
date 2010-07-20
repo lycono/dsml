@@ -27,6 +27,6 @@ import java.io.*;
  */
 public interface State {
 
-    public State step(StateContext ctx, Reader in) throws IOException;
+    public State step(StateContext ctx, Reader in) throws IOException, StateException;
 
 }

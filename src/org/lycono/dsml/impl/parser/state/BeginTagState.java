@@ -29,7 +29,7 @@ public class BeginTagState implements State {
 
     public BeginTagState() {}
 
-    public State step(StateContext ctx, Reader in) throws IOException {
+    public State step(StateContext ctx, Reader in) throws IOException, StateException {
         ctx.onEvent(new StateEvent(StateEvent.Type.BEGIN_TAG));
         char c = (char) in.read();
         if (StateUtil.isBlankChar(c)) {
@@ -41,7 +41,7 @@ public class BeginTagState implements State {
             return next;
         }
         else {
-            throw new RuntimeException("Invalid character for state BeginTagState: " + c);
+            throw StateUtil.createCharError(ctx, c, new String[] {"blank", "letter"});
         }
     }
 

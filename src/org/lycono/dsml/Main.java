@@ -105,6 +105,9 @@ public class Main {
                 }
             }
         }
+        catch (InvalidContentException e) {
+            System.err.println(e.getMessage());
+        }
         catch (Exception e) {
             System.err.println("An error occurred parsing the file.");
             e.printStackTrace();

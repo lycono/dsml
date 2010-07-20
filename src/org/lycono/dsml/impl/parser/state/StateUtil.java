@@ -27,9 +27,9 @@ public class StateUtil {
 
     public static final char EOF = 65535;
 
-    public static void errorIfEof(char c) {
+    public static void errorIfEof(char c) throws StateException {
         if (c == EOF) {
-            throw new RuntimeException("Encountered end of file while parsing.");
+            throw new StateException("Encountered end of file while parsing.");
         }
     }
 
@@ -49,6 +49,15 @@ public class StateUtil {
         else {
             return false;
         }
+    }
+
+    public static InvalidCharacterException createCharError(StateContext ctx, 
+                                                            char c, 
+                                                            String[] validChars) throws StateException {
+        return new InvalidCharacterException(ctx.getLineNumber(),
+                                             ctx.getCharNumber(),
+                                             validChars,
+                                             c);
     }
 
 }

@@ -36,15 +36,37 @@ public class StateContextAdapter implements StateContext {
     private final Stack<String> mTagNames;
     private String mAttrName;
     private boolean mDebug;
+    private int mLineNum;
+    private int mCharNum;
 
     public StateContextAdapter(ParseContext ctx) {
         mCtx = ctx;
         mTagNames = new Stack<String>();
         mDebug = false;
+        mLineNum = 1;
+        mCharNum = 1;
     }
 
     public void setDebug(boolean b) {
         mDebug = b;
+    }
+
+    public void onChar(char c) {
+        if (c == '\n') {
+            mLineNum++;
+            mCharNum = 1;
+        }
+        else {
+            mCharNum++;
+        }
+    }
+
+    public int getLineNumber() {
+        return mLineNum;
+    }
+
+    public int getCharNumber() {
+        return mCharNum;
     }
 
     public void onEvent(StateEvent e) {

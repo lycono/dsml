@@ -41,17 +41,48 @@ public class DefaultParser implements Parser {
         mStateDebug = b;
     }
 
-    public void parse(ParseContext ctx, InputStream in) throws IOException {
+    public void parse(ParseContext ctx, InputStream in) throws IOException, ParseException {
         Reader reader = new BufferedReader(new InputStreamReader(in));
         parse(ctx, reader);
     }
 
-    public void parse(ParseContext ctx, Reader in) throws IOException {
+    public void parse(ParseContext ctx, Reader in) throws IOException, ParseException {
         StateContextAdapter sctx = new StateContextAdapter(ctx);
         sctx.setDebug(mStateDebug);
         State s = new StartState();
-        while (s != null) {
-            s = s.step(sctx, in);
+        try {
+            while (s != null) {
+                s = s.step(sctx, in);
+            }
+        }
+        catch (InvalidCharacterException e) {
+            StringBuilder buf = new StringBuilder();
+            buf.append("Invalid character on line ");
+            buf.append(e.getLineNumber());
+            buf.append(" at character ");
+            buf.append(e.getCharNumber());
+            buf.append(": '");
+            buf.append(e.getInvalidChar());
+            buf.append("'. Expected ");
+            if (e.getValidChars().length > 1) {
+                buf.append(" one of ");
+            }
+            if (e.getValidChars().length > 0) {
+                buf.append("'" + e.getValidChars()[0] + "'");
+            }
+            for (int i = 1; i < e.getValidChars().length; i++) {
+                buf.append(", '" + e.getValidChars()[i] + "'");
+            }
+            buf.append(".");
+
+            throw new InvalidContentException(buf.toString(), 
+                                              e.getLineNumber(),
+                                              e.getCharNumber(),
+                                              e.getValidChars(),
+                                              e.getInvalidChar());
+        }
+        catch (StateException e) {
+            throw new ParseException("An error occurred parsing the document.", e);
         }
     }
 

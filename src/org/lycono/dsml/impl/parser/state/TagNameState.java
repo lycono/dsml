@@ -31,7 +31,7 @@ public class TagNameState extends GatheringState {
         super();
     }
 
-    public State step(StateContext ctx, Reader in) throws IOException {
+    public State step(StateContext ctx, Reader in) throws IOException, StateException {
         char c = (char) in.read();
         StateUtil.errorIfEof(c);
         if (Character.isLetter(c) || Character.isDigit(c) || (c == '-') || (c == '_')) {
@@ -47,7 +47,7 @@ public class TagNameState extends GatheringState {
             return new EndTagState();
         }
         else {
-            throw new RuntimeException("Illegal character for state TagNameState: " + c);
+            throw StateUtil.createCharError(ctx, c, new String[] {"letter", "digit", "-", "_", "blank", ")"});
         }
     }
 

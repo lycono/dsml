@@ -31,7 +31,7 @@ public class AttributeNameState extends GatheringState {
         super();
     }
 
-    public State step(StateContext ctx, Reader in) throws IOException {
+    public State step(StateContext ctx, Reader in) throws IOException, StateException {
         char c = (char) in.read();
         StateUtil.errorIfEof(c);
         if (Character.isLetter(c) || Character.isDigit(c)) {
@@ -43,7 +43,7 @@ public class AttributeNameState extends GatheringState {
             return new AttributeEqualityState();
         }
         else {
-            throw new RuntimeException("Invalid character for state AttributeState: " + c);
+            throw StateUtil.createCharError(ctx, c, new String[] {"=", "character", "digit"});
         }
     }
 

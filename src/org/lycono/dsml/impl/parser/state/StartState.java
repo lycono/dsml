@@ -29,7 +29,7 @@ public class StartState implements State {
 
     public StartState() {}
 
-    public State step(StateContext ctx, Reader in) throws IOException {
+    public State step(StateContext ctx, Reader in) throws IOException, StateException {
         char c = (char) in.read();
         StateUtil.errorIfEof(c);
         if (StateUtil.isBlankChar(c)) {
@@ -39,7 +39,7 @@ public class StartState implements State {
             return new BeginTagState();
         }
         else {
-            throw new RuntimeException("Invalid character for State StartState: " + c);
+            throw StateUtil.createCharError(ctx, c, new String[] {"("});
         }
     }
 

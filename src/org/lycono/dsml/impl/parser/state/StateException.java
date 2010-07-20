@@ -18,22 +18,23 @@
 */
 package org.lycono.dsml.impl.parser.state;
 
-import java.io.*;
-
 /**
- * Parsing state.
+ * Exception raised when the state machine encounters an error.
  *
  * @author Matt Bateman
  */
-public class EndTagState implements State {
+public class StateException extends Exception {
 
-    public EndTagState() {}
+    public StateException() {
+        super();
+    }
 
-    public State step(StateContext ctx, Reader in) throws IOException, StateException {
-        char c = (char) in.read();
-        StateUtil.errorIfEof(c);
-        ctx.onEvent(new StateEvent(StateEvent.Type.END_TAG, ctx.getCurrentTagName()));
-        return new PostTagState();
+    public StateException(String mesg) {
+        super(mesg);
+    }
+
+    public StateException(String mesg, Throwable t) {
+        super(mesg, t);
     }
 
 }
